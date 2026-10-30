@@ -20,8 +20,8 @@
 #include "block_type.h"
 #include "pickaxe_type.h"
 
-#define WIDTH 1100
-#define HEIGHT 800
+#define WIDTH 1000
+#define HEIGHT 1000
 #define GRAVITY 0.3
 #define FORCE GRAVITY * 100
 
@@ -223,6 +223,8 @@ static bool update_state(Pickaxe* pick, Level* level, Camera2D *camera, int* poi
 
 	if (is_collide_y && !is_collide_x) {
 		pick->vel.x = GetRandomValue(-2, 2);
+		while (pick->vel.x == 0)
+			pick->vel.x = GetRandomValue(-2, 2);
 	}
 	if (is_collide_y) {
 		pick->vel.y = -GRAVITY * FORCE;
@@ -265,13 +267,12 @@ int main(void) {
 			ClearBackground(BLUE);
 
 				BeginMode2D(camera);
-					draw_level(&level, false);
+					draw_level(&level,     false);
 					draw_pickaxe(&pickaxe, false);
 				EndMode2D();
 				const char* text = TextFormat("%d", player_points);
 				DrawText(text, WIDTH / 2 - MeasureText(text, 100) / 2, 0, 100, WHITE);
-				if (!update_state(&pickaxe, &level, &camera, &player_points))
-					break; // game over
+				if (!update_state(&pickaxe, &level, &camera, &player_points)) break; 
 
 		EndDrawing();
 	}

@@ -42,9 +42,9 @@ const int BLOCK_TYPE_DURABILITY[] = {
 const int BLOCK_TYPE_WEIGHT[] = {
 	0,  // GRASS
 	0,  // DIRT
-	60, // STONE
-	20, // GOLD_ORE
-	20, // IRON_ORE
+	70, // STONE
+	10, // GOLD_ORE
+	15, // IRON_ORE
 	30, // COAL_ORE
 	5, // DIAMOND_ORE
 	1, // NETHERITE_ORE
