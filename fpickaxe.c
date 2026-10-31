@@ -23,15 +23,16 @@
 #define WIDTH 1000
 #define HEIGHT 1000
 #define GRAVITY 0.3
-#define FORCE GRAVITY * 100
+#define FORCE GRAVITY * 100 
+#define SPEED_UP_GRAVITY GRAVITY * 2
 
 #define LEVEL_HEIGHT 20
-
 #define PICKAXETYPE IRON_PICKAXE 
 
 #define BLOCK_SIZE 100
 #define BLOCK_COLS (WIDTH / BLOCK_SIZE)
 #define PICKAXE_SIZE 100 
+#define DIRT_LAYERS 2
 
 typedef struct {
 	Rectangle hitbox;
@@ -104,8 +105,7 @@ static void init_level(Level* level, const int height) {
 		};
 	}
 
-	int dirt_rows = 3;
-	int dirt_blocks = BLOCK_COLS*(dirt_rows+1);
+	int dirt_blocks = BLOCK_COLS*(DIRT_LAYERS+1);
 
 	int dirt_row_counter = 0;
 	int dirt_col_counter = 1;
@@ -201,7 +201,9 @@ static void break_block(Block* block, int* points) {
 }
 
 static bool update_state(Pickaxe* pick, Level* level, Camera2D *camera, int* points) {
-	pick->vel.y += GRAVITY;
+	pick->vel.y += IsMouseButtonDown(MOUSE_BUTTON_LEFT) ||
+				   IsKeyDown(KEY_DOWN)
+				   ? SPEED_UP_GRAVITY : GRAVITY;
 		
 	bool is_collide_y = false;
 	bool is_collide_x = false;
@@ -226,9 +228,8 @@ static bool update_state(Pickaxe* pick, Level* level, Camera2D *camera, int* poi
 		while (pick->vel.x == 0)
 			pick->vel.x = GetRandomValue(-2, 2);
 	}
-	if (is_collide_y) {
+	if (is_collide_y)
 		pick->vel.y = -GRAVITY * FORCE;
-	}
 
 	pick->hitbox.y += pick->vel.y;
 	pick->hitbox.x += pick->vel.x;
